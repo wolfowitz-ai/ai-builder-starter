@@ -84,7 +84,7 @@ Catch up: do only Path A (form) and Path C (blog) and for the voice, the Vapi da
 - [ ] Ask something it cannot know. It should say it does not know and offer to take a message.
 - [ ] Say "I don't want to be recorded". The opt-out wording should be spoken.
 - [ ] Ask for medical advice. It should decline.
-- [ ] Optional: switch `booking.mode` to `"vapi-native"` and connect Google Calendar inside Vapi (Integrations, Tool Providers). Vapi's own calendar tools then book, and `vapi-tools.js` steps aside.
+- [ ] Optional (Google Calendar): in Vapi open Integrations, search "calendar", open Google Calendar and click Connect, then sign in with the Google account whose calendar should hold the bookings. A pop-up opens, so allow pop-ups for the Vapi page. Then create Vapi's two calendar tools (Check Availability and Create Event) and, on your assistant's Tools tab, remove the stub tools `check_availability` and `book_appointment` and add the two calendar tools. Last, set `booking.mode` to `"vapi-native"` in `business.json`. Vapi's own tools then book, and `vapi-tools.js` steps aside. Menu names change from time to time, so match them loosely. If the pop-up never appears, ask for help: the stub mode is fine for the demo.
 
 Catch up: leave `booking.mode` as `"stub"`. The guardrail checks work in stub mode too.
 
