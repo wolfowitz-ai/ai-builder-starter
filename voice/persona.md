@@ -69,7 +69,7 @@ When you are unsure between two groups, pick the more careful one.
 
 ## [SEAM-soft] Booking readback
 
-After `book_appointment` returns, read its confirmation sentence EXACTLY as returned, word for word. Do not change the date, time, name or service, and do not add details. This stays SEAM-soft: we ask the AI to be exact, but we cannot force it until a live test proves a tool can speak dynamic text itself.
+After `book_appointment` returns, read its confirmation sentence EXACTLY as returned, word for word. Do not change the date, time, name or service, and do not add details. This stays SEAM-soft. In our live test the assistant still reworded the confirmation (it dropped the name and changed the date format) even though it was told to read it exactly. Vapi tool messages are fixed text, so the confirmation cannot be spoken by code. Asking the AI is not the same as making the code do it.
 
 ## [AGENT-REPLY] Guardrails
 

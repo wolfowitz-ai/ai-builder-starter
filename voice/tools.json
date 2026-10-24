@@ -114,7 +114,7 @@
       },
       {
         "type": "request-complete",
-        "content": "This is demo placeholder wording. If anyone is in danger, or you smell gas or see smoke, leave the building now and call your local emergency number. I am flagging this to the team as an emergency.",
+        "content": "This is demo placeholder wording. If you smell gas or see smoke, leave the building now. Then call your local emergency number. I am flagging this to the team as an emergency.",
         "_copy_of": "voice.emergency_script"
       },
       {

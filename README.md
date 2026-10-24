@@ -132,6 +132,8 @@ Vapi is the voice service. It is free while your starting credits last, then it 
 
 The greeting, recording notice, opt-out and emergency lines are spoken word for word. The greeting and recording notice come from `business.json` through `app.js`. The opt-out and emergency lines are fixed text inside the Vapi tool messages, so they are copies of the same text from `business.json`. Paste from `business.json` into `voice/tools.json` and into Vapi. `seam.html` turns red if they drift.
 
+Spoken text versus the call log: Vapi's call log shows a tidied-up version of what was said (numbers become digits, punctuation moves, and we saw short words such as "if" or "or" go missing). Do not use the log to prove a fixed line was spoken word for word. Listen to a real test call instead, and keep fixed lines short and simple (short sentences, no long comma lists).
+
 The Vapi dashboard's own test call is only a "does the assistant answer at all?" connection check. It will not know your business details, because the website's voice button passes them in from `business.json`. The real test is the voice button on your own live site.
 
 ## Day 4 checks: form, voice, blog
@@ -146,9 +148,13 @@ Each path has a fallback if you do not have the account yet.
 
 Set `voice.enabled` to `false` in `business.json`. The page then shows "The voice demo is switched off right now." A public voice button spends your Vapi credits every time any visitor uses it, so switch it off when you are not demoing.
 
+## Protect your credits (Vapi public key settings)
+
+On the API Keys page of the Vapi dashboard, the public key shows three settings: Origins ("All domains allowed" by default), Assistants ("All Assistants allowed") and Transient Assistants ("Allowed"). Anyone who copies your public key from your site can use it, so after your site works: limit Origins to your own site address, limit Assistants to the one assistant you made, and switch Transient Assistants off. Look for an edit option on the key; Vapi's menus change, so match the names loosely.
+
 ## Cost and safety notes
 
-- Vapi: free while credits last. Voice calls cost real money afterwards.
+- Vapi: free while credits last. New accounts showed $5 of free credit on 2026-10-24. In our test calls (default model and Vapi's own voice) a call cost about 6 to 7 US cents a minute, so $5 is roughly an hour of testing. Voice calls cost real money afterwards. Prices change, so check Vapi's pricing page.
 - Everything else (GitHub, Cloudflare Pages, Web3Forms free plan) is free at this size.
 - Never put a Vapi private key in this repo.
 - Real deployments need their own professional and legal review. Recording rules, opt-out wording and emergency wording differ by place and by business.
