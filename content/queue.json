@@ -1,0 +1,38 @@
+[
+  {
+    "_seam": "[CODE-QUEUE] id, publish_on and status are checked by blog.html. [AGENT] title and body are drafted by your coding agent. This line is ignored by the page.",
+    "id": "2026-10-10-why-ac-ices-up",
+    "title": "Why your AC unit can freeze over",
+    "body": "If you see ice on the pipes or the outdoor unit, switch the system off and let it thaw.\n\nThe two most common causes are a clogged air filter and low airflow. Check the filter first. A dirty one is the cheapest problem to fix and the easiest to prevent.\n\nIf the ice comes back after a fresh filter, it is time to book a visit.",
+    "publish_on": "2026-10-10",
+    "status": "published"
+  },
+  {
+    "id": "2026-10-18-filter-basics",
+    "title": "Air filters in plain English",
+    "body": "The filter catches dust before it reaches the system. A clogged filter makes the system work harder and can shorten its life.\n\nLook at yours once in a while. If you cannot see light through it, swap it.",
+    "publish_on": "2026-10-18",
+    "status": "published"
+  },
+  {
+    "id": "2026-10-25-tune-up-season",
+    "title": "Is it time for a heating tune-up?",
+    "body": "Even in a warm climate, the heat side of your system sits unused for months. A quick check before the first cool morning avoids a cold surprise.\n\nA tune-up is a look-over, a clean and a test, so small problems are found early.",
+    "publish_on": "2026-10-25",
+    "status": "queued"
+  },
+  {
+    "id": "2026-11-02-heat-pump-explained",
+    "title": "What is a heat pump, really?",
+    "body": "A heat pump moves heat instead of making it. In summer it carries heat out of your home. In cooler weather it carries heat in.\n\nThat is why one machine can both cool and warm a house.",
+    "publish_on": "2026-11-02",
+    "status": "queued"
+  },
+  {
+    "id": "2026-11-15-what-to-expect-diagnostic",
+    "title": "What happens during a diagnostic visit",
+    "body": "A technician listens to your description, checks the thermostat, the filter and the outdoor unit, and then tests the system.\n\nYou get a plain explanation of what was found before any repair work starts.",
+    "publish_on": "2026-11-15",
+    "status": "queued"
+  }
+]

@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How this works - the seam map</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <h1>How this works</h1>
+    <p>Which words come from code, and which are left to the AI agent.</p>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="blog.html">Blog</a>
+      <a href="seam.html">How this works</a>
+    </nav>
+  </header>
+
+  <main>
+    <p>
+      Colours: <span class="tag label-code">CODE</span> the computer does it the same way every time.
+      <span class="tag label-agent">AGENT</span> the AI decides or writes it.
+      <span class="tag label-seam">SEAM</span> code and agent meet here.
+      <span class="tag label-soft">SEAM-soft</span> we ask the agent to be exact, but cannot force it.
+    </p>
+
+    <!-- [SEAM] The map. This page reads SEAM.md and draws its table. Edit SEAM.md, not this page. -->
+    <h2>The seam map</h2>
+    <div id="map">Loading...</div>
+
+    <!-- [SEAM] Live prompt preview: voice/persona.md with the real values from business.json filled in. -->
+    <h2>What the voice assistant is told</h2>
+    <p>This is the prompt the assistant receives, with your business.json values filled in. Each part is coloured by its label.</p>
+    <div id="preview">Loading...</div>
+
+    <!-- [CODE-VERBATIM] The sync check. Vapi tool messages are fixed text, so they are copies of the
+         text in business.json. If you change one and forget the other, a row turns red. -->
+    <h2>Verbatim copies in sync?</h2>
+    <p>The spoken lines in voice/tools.json must match business.json word for word.</p>
+    <div id="sync">Loading...</div>
+  </main>
+
+  <script type="module">
+    // Plain JavaScript, no libraries. Everything here only READS files and draws them.
+    import { buildVariables, buildFirstMessage } from "./app.js";
+
+    const $ = (id) => document.getElementById(id);
+
+    // Make an element with safe text (textContent never runs HTML).
+    function el(tag, text, className) {
+      const node = document.createElement(tag);
+      if (text !== undefined) node.textContent = text;
+      if (className) node.className = className;
+      return node;
+    }
+
+    async function getText(path) {
+      const response = await fetch(path);
+      if (!response.ok) throw new Error(`${path}: ${response.status}`);
+      return response.text();
+    }
+
+    // "CODE-INJECT" -> "label-code", "SEAM-soft" -> "label-soft", and so on.
+    function labelClass(label) {
+      const l = label.replace(/[\[\]]/g, "").trim().toUpperCase();
+      if (l.startsWith("SEAM-SOFT")) return "label-soft";   // check before plain SEAM
+      if (l.startsWith("CODE")) return "label-code";
+      if (l.startsWith("AGENT")) return "label-agent";
+      if (l.startsWith("SEAM")) return "label-seam";
+      return "label-none";
+    }
+
+    /* [SEAM] 1. The seam map: find the pipe table in SEAM.md whose header starts with "Item". */
+    async function drawMap() {
+      const lines = (await getText("SEAM.md")).split("\n").map((l) => l.trim());
+      const rows = lines.filter((l) => l.startsWith("|"));
+      const cells = (line) => line.replace(/^\||\|$/g, "").split("|").map((c) => c.trim());
+      const table = el("table", undefined, "seam-table");
+      let seenHeader = false;
+      for (const line of rows) {
+        const c = cells(line);
+        if (c.every((x) => /^:?-+:?$/.test(x))) continue;       // the |---|---| line
+        const tr = el("tr");
+        if (!seenHeader) {
+          if (c[0].toLowerCase() !== "item") continue;
+          seenHeader = true;
+          c.forEach((x) => tr.append(el("th", x)));
+        } else {
+          c.forEach((x, i) => {
+            const td = el("td");
+            if (i === 1) td.append(el("span", x, `tag ${labelClass(x)}`));
+            else td.textContent = x;
+            tr.append(td);
+          });
+        }
+        table.append(tr);
+      }
+      $("map").replaceChildren(seenHeader ? table : el("p", "Could not find the table in SEAM.md.", "status error"));
+    }
+
+    /* [SEAM] 2. Prompt preview. persona.md is split at lines like "## [AGENT-QUALIFY] Questions". */
+    async function drawPreview(biz) {
+      const persona = await getText("voice/persona.md");
+      const vars = buildVariables(biz);
+      const fill = (text) => text.replace(/\{\{\s*(\w+)\s*\}\}/g, (whole, key) => (key in vars ? vars[key] : whole));
+
+      const parts = [];
+      let current = { label: "", title: "Introduction (not label-coloured)", lines: [] };
+      for (const line of persona.split("\n")) {
+        const header = line.match(/^##\s*\[([A-Za-z-]+)\]\s*(.*)$/);
+        if (header) {
+          parts.push(current);
+          current = { label: header[1], title: header[2], lines: [] };
+        } else {
+          current.lines.push(line);
+        }
+      }
+      parts.push(current);
+
+      const box = el("div");
+      // The first message is spoken by code, not by the model, so it is shown separately.
+      const first = el("div", undefined, "prompt-part label-code");
+      first.append(el("h3", "[CODE-VERBATIM] First message (spoken by code, word for word)"), el("pre", buildFirstMessage(biz)));
+      box.append(first);
+
+      for (const part of parts) {
+        const text = fill(part.lines.join("\n")).trim();
+        if (!text) continue;
+        const div = el("div", undefined, `prompt-part ${part.label ? labelClass(part.label) : "label-none"}`);
+        div.append(el("h3", part.label ? `[${part.label}] ${part.title}` : part.title), el("pre", text));
+        box.append(div);
+      }
+      $("preview").replaceChildren(box);
+    }
+
+    /* [CODE-VERBATIM] 3. Sync check: each message in tools.json says which business.json key it copies. */
+    async function drawSync(biz) {
+      const tools = JSON.parse(await getText("voice/tools.json"));
+      const table = el("table", undefined, "seam-table");
+      const head = el("tr");
+      ["Tool", "Message", "Copy of", "Result"].forEach((h) => head.append(el("th", h)));
+      table.append(head);
+
+      let bad = 0;
+      for (const tool of tools) {
+        for (const message of tool.messages || []) {
+          if (!message._copy_of) continue;
+          const source = message._copy_of.split(".").reduce((obj, key) => (obj ? obj[key] : undefined), biz);
+          const ok = typeof source === "string" && source === message.content;
+          if (!ok) bad += 1;
+          const tr = el("tr");
+          tr.append(el("td", tool.function.name), el("td", message.type), el("td", message._copy_of));
+          tr.append(el("td", ok ? "In sync" : source === undefined ? "MISMATCH: no such key in business.json" : "MISMATCH: text differs", ok ? "sync-ok" : "sync-bad"));
+          table.append(tr);
+        }
+      }
+      const summary = el("p", bad === 0 ? "All copies match." : `${bad} copy(ies) differ. Paste the text from business.json into voice/tools.json (and into Vapi).`, bad === 0 ? "sync-ok" : "sync-bad");
+      $("sync").replaceChildren(summary, table);
+    }
+
+    /* Run all three; one failing part does not stop the others. */
+    async function main() {
+      const biz = JSON.parse(await getText("business.json"));
+      for (const [id, draw] of [["map", drawMap], ["preview", drawPreview], ["sync", drawSync]]) {
+        try { await draw(biz); }
+        catch (err) { $(id).replaceChildren(el("p", `Could not draw this part: ${err.message}`, "status error")); }
+      }
+    }
+    main();
+  </script>
+</body>
+</html>

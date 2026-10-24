@@ -1,0 +1,122 @@
+/* style.css - the one stylesheet for every page.
+   Mobile first: the base rules are for phones, the @media block at the bottom widens things.
+   Colours are high contrast on purpose. Change the --brand colour to restyle the site. */
+
+:root {
+  --brand: #0b4f8a;          /* main colour: header, buttons, links */
+  --text: #1a1a1a;
+  --page: #ffffff;
+  --soft: #f2f5f8;
+  --line: #c9d2db;
+
+  /* Seam label colours, used by seam.html */
+  --code: #1d4ed8;
+  --code-bg: #e3ecff;
+  --agent: #b45309;
+  --agent-bg: #ffedd5;
+  --seam: #6d28d9;
+  --seam-bg: #ede4ff;
+  --soft-bg: #f5f0ff;
+  --bad: #b91c1c;
+  --bad-bg: #fee2e2;
+  --good: #166534;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--page);
+}
+
+main, .site-header > *, footer { max-width: 46rem; margin-left: auto; margin-right: auto; padding: 0 1rem; }
+main { padding-bottom: 2rem; }
+footer { color: #444; font-size: 0.9rem; padding-bottom: 2rem; }
+
+a { color: var(--brand); }
+
+/* The DEMO ONLY banner */
+.banner {
+  background: #fff3bf;
+  color: #3b2f00;
+  border-bottom: 3px solid #e0a800;
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.site-header { background: var(--brand); color: #fff; padding: 1rem 0; }
+.site-header h1 { margin: 0; font-size: 1.6rem; }
+.site-header p { margin: 0.25rem auto 0.75rem; }
+.site-header nav a { color: #fff; margin-right: 1rem; font-weight: 600; }
+
+h2 { margin-top: 2rem; color: var(--brand); }
+
+/* Forms */
+label { display: block; margin-top: 1rem; font-weight: 600; }
+input[type=text], input[type=email], textarea {
+  width: 100%;
+  padding: 0.6rem;
+  font: inherit;
+  border: 2px solid var(--line);
+  border-radius: 6px;
+}
+input:focus, textarea:focus, button:focus-visible { outline: 3px solid #f59e0b; outline-offset: 1px; }
+.trap { position: absolute; left: -9999px; }   /* hidden from people, visible to bots */
+
+button {
+  margin-top: 1rem;
+  padding: 0.7rem 1.2rem;
+  font: inherit;
+  font-weight: 700;
+  color: #fff;
+  background: var(--brand);
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+}
+button:disabled { opacity: 0.6; cursor: wait; }
+
+/* Messages under forms and buttons */
+.status { min-height: 1.5rem; }
+.status.ok { color: var(--good); font-weight: 600; }
+.status.error { color: var(--bad); font-weight: 600; }
+.status.warn { background: #fff3bf; padding: 0.5rem; border-radius: 6px; }
+
+/* Blog */
+.post { border-top: 1px solid var(--line); padding-bottom: 1rem; }
+.post h2 { margin-bottom: 0; }
+.post-date { color: #555; font-size: 0.9rem; margin-top: 0; }
+.debug { background: var(--soft); border: 2px dashed var(--line); padding: 0 1rem 1rem; margin-top: 2rem; }
+
+/* seam.html */
+.seam-table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+.seam-table th, .seam-table td { border: 1px solid var(--line); padding: 0.4rem 0.6rem; text-align: left; vertical-align: top; }
+.seam-table th { background: var(--soft); }
+
+.tag { display: inline-block; padding: 0 0.5rem; border-radius: 4px; font-weight: 700; font-size: 0.85rem; white-space: nowrap; }
+.label-code  { background: var(--code-bg);  color: var(--code);  border-left: 6px solid var(--code); }
+.label-agent { background: var(--agent-bg); color: var(--agent); border-left: 6px solid var(--agent); }
+.label-seam  { background: var(--seam-bg);  color: var(--seam);  border-left: 6px solid var(--seam); }
+.label-soft  {
+  color: var(--seam);
+  border-left: 6px dashed var(--seam);
+  background: repeating-linear-gradient(135deg, var(--soft-bg), var(--soft-bg) 8px, #fff 8px, #fff 16px);
+}
+.label-none { background: var(--soft); border-left: 6px solid var(--line); }
+
+.prompt-part { margin: 0.75rem 0; padding: 0.5rem 0.75rem; border-radius: 6px; }
+.prompt-part h3 { margin: 0 0 0.25rem; font-size: 1rem; }
+.prompt-part pre { margin: 0; white-space: pre-wrap; word-wrap: break-word; font: inherit; font-size: 0.95rem; }
+
+.sync-ok { color: var(--good); font-weight: 700; }
+.sync-bad { color: var(--bad); background: var(--bad-bg); font-weight: 700; }
+
+@media (min-width: 40rem) {
+  body { font-size: 1.1rem; }
+  .site-header h1 { font-size: 2rem; }
+}

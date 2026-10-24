@@ -1,0 +1,52 @@
+{
+  "demo_only": true,
+  "name": "Sample Comfort Heating & Air",
+  "tagline": "Fictional heating and cooling help for a sunny Central Florida town",
+  "industry": "HVAC (heating, ventilation and air conditioning)",
+  "service_area": "Central Florida (a made-up service area for this demo)",
+  "timezone": "America/New_York",
+  "hours": {
+    "mon": "08:00-17:00",
+    "tue": "08:00-17:00",
+    "wed": "08:00-17:00",
+    "thu": "08:00-17:00",
+    "fri": "08:00-17:00",
+    "sat": "09:00-13:00",
+    "sun": "closed"
+  },
+  "services": [
+    { "name": "AC repair visit", "duration_min": 60 },
+    { "name": "Heating tune-up", "duration_min": 60 },
+    { "name": "System diagnostic", "duration_min": 90 },
+    { "name": "New system estimate", "duration_min": 60 }
+  ],
+  "prices": {
+    "AC repair visit": "Visit fee $89, repairs quoted before work starts (fictional price)",
+    "Heating tune-up": "$129 (fictional price)",
+    "System diagnostic": "$149 (fictional price)",
+    "New system estimate": "Free (fictional)"
+  },
+  "booking": {
+    "mode": "stub",
+    "min_notice_hours": 2,
+    "slot_minutes": 60
+  },
+  "voice": {
+    "enabled": false,
+    "vapi_public_key": "PASTE_YOUR_VAPI_PUBLIC_KEY",
+    "assistant_id": "PASTE_YOUR_VAPI_ASSISTANT_ID",
+    "greeting": "Hi, this is a demo assistant for Sample Comfort Heating and Air, a fictional business, so nothing here is real.",
+    "recording_notice": "DEMO ONLY placeholder wording: this practice call may be recorded.",
+    "opt_out": "DEMO ONLY placeholder wording: okay, noted that you do not want to be recorded. A real business needs its own reviewed wording here.",
+    "emergency_script": "DEMO ONLY placeholder wording: if anyone is in danger, or you smell gas or see smoke, leave the building now and call your local emergency number. I am flagging this to the team as an emergency.",
+    "tool_error_line": "Sorry, something went wrong on my side. I can take a message for the team instead."
+  },
+  "form": {
+    "web3forms_key": "PASTE_YOUR_WEB3FORMS_KEY",
+    "success_message": "Thanks, your message was sent. This is a demo business, so nobody will actually reply."
+  },
+  "extra": {
+    "brands_serviced": "Most major brands (fictional)",
+    "arrival_note": "Technicians send a heads-up message before they arrive (fictional)"
+  }
+}

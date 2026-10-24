@@ -1,0 +1,130 @@
+[
+  {
+    "_seam": "[SEAM] The agent decides WHEN to call check_availability; the function checks the hours with fixed rules [CODE]. Lines starting with _ are notes for you: delete them when pasting into Vapi.",
+    "type": "function",
+    "function": {
+      "name": "check_availability",
+      "description": "Look up open appointment times on one date. Call this before offering any time to the caller.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "date": { "type": "string", "description": "The date to check, formatted YYYY-MM-DD." }
+        },
+        "required": ["date"]
+      }
+    },
+    "server": { "url": "https://YOUR-SITE.pages.dev/api/vapi-tools" },
+    "messages": [
+      {
+        "type": "request-failed",
+        "content": "Sorry, something went wrong on my side. I can take a message for the team instead.",
+        "_copy_of": "voice.tool_error_line"
+      }
+    ]
+  },
+  {
+    "_seam": "[SEAM-soft] After this tool returns, the persona asks the agent to read the confirmation exactly. We cannot force it, so this stays soft until a live test shows otherwise.",
+    "type": "function",
+    "function": {
+      "name": "book_appointment",
+      "description": "Book an appointment once the caller has agreed to a specific time. Needs the caller's name, a contact number they give you, the service and the start time.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string", "description": "Caller's name." },
+          "phone": { "type": "string", "description": "A contact number the caller gives you." },
+          "service": { "type": "string", "description": "Exact service name from the list of services." },
+          "start_iso": { "type": "string", "description": "Start time like 2026-10-26T09:00 in the business timezone." }
+        },
+        "required": ["name", "phone", "service", "start_iso"]
+      }
+    },
+    "server": { "url": "https://YOUR-SITE.pages.dev/api/vapi-tools" },
+    "messages": [
+      {
+        "type": "request-failed",
+        "content": "Sorry, something went wrong on my side. I can take a message for the team instead.",
+        "_copy_of": "voice.tool_error_line"
+      }
+    ]
+  },
+  {
+    "_seam": "[SEAM] The agent judges an emergency; the spoken words are a fixed copy of voice.emergency_script [CODE-VERBATIM].",
+    "type": "function",
+    "function": {
+      "name": "escalate",
+      "description": "Call this right away when the caller describes an emergency (danger to people or property). Give a short reason.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "reason": { "type": "string", "description": "One short sentence on what the caller described." }
+        },
+        "required": ["reason"]
+      }
+    },
+    "server": { "url": "https://YOUR-SITE.pages.dev/api/vapi-tools" },
+    "messages": [
+      {
+        "type": "request-complete",
+        "content": "DEMO ONLY placeholder wording: if anyone is in danger, or you smell gas or see smoke, leave the building now and call your local emergency number. I am flagging this to the team as an emergency.",
+        "_copy_of": "voice.emergency_script"
+      },
+      {
+        "type": "request-failed",
+        "content": "Sorry, something went wrong on my side. I can take a message for the team instead.",
+        "_copy_of": "voice.tool_error_line"
+      }
+    ]
+  },
+  {
+    "_seam": "[SEAM] The agent decides when a message is the right fallback; the function records it with fixed rules [CODE].",
+    "type": "function",
+    "function": {
+      "name": "take_message",
+      "description": "Take a message for the team when you cannot help, do not know the answer, or the caller prefers a call back.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string", "description": "Caller's name." },
+          "phone": { "type": "string", "description": "A contact number the caller gives you." },
+          "note": { "type": "string", "description": "What the caller wants the team to know." }
+        },
+        "required": ["name", "phone", "note"]
+      }
+    },
+    "server": { "url": "https://YOUR-SITE.pages.dev/api/vapi-tools" },
+    "messages": [
+      {
+        "type": "request-failed",
+        "content": "Sorry, something went wrong on my side. I can take a message for the team instead.",
+        "_copy_of": "voice.tool_error_line"
+      }
+    ]
+  },
+  {
+    "_seam": "[CODE-VERBATIM] A tool whose only job is to speak the opt-out words, a fixed copy of voice.opt_out.",
+    "type": "function",
+    "function": {
+      "name": "opt_out",
+      "description": "Call this when the caller says they do not want to be recorded.",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      }
+    },
+    "server": { "url": "https://YOUR-SITE.pages.dev/api/vapi-tools" },
+    "messages": [
+      {
+        "type": "request-complete",
+        "content": "DEMO ONLY placeholder wording: okay, noted that you do not want to be recorded. A real business needs its own reviewed wording here.",
+        "_copy_of": "voice.opt_out"
+      },
+      {
+        "type": "request-failed",
+        "content": "Sorry, something went wrong on my side. I can take a message for the team instead.",
+        "_copy_of": "voice.tool_error_line"
+      }
+    ]
+  }
+]

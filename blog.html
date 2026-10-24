@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Blog - {name}</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- [CODE] DEMO ONLY banner. app.js fills it in and shows it when demo_only is true in business.json. -->
+  <div id="demo-banner" class="banner" role="note" hidden></div>
+
+  <header class="site-header">
+    <h1 data-bind="name">Your business name</h1>
+    <p>Blog</p>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="blog.html">Blog</a>
+      <a href="seam.html">How this works</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- [CODE-QUEUE] Posts come from content/queue.json. app.js shows a post only when it is
+         valid, its status is queued or published, and its date has arrived (business timezone).
+         [AGENT] The wording of each post is drafted by your coding agent (see publisher/publisher.md). -->
+    <section id="posts">
+      <p>Loading posts...</p>
+    </section>
+
+    <!-- [CODE-QUEUE] Only shown when the address ends in ?debug : lists entries that were skipped and why. -->
+    <section id="debug" class="debug" hidden></section>
+  </main>
+
+  <footer>
+    <p>Built from a free template. Fictional business, for learning.</p>
+  </footer>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
