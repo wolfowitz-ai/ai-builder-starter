@@ -127,7 +127,7 @@ Vapi is the voice service. It is free while your starting credits last, then it 
 2. Public key: in the dashboard find the API Keys page and copy the PUBLIC key. Never use the private key anywhere in this repo.
 3. Create a new assistant (blank). Pick a voice and a model.
 4. System prompt: paste `voice/persona.md` from the first `##` heading onward.
-5. Knowledge: add `voice/knowledge.md` using Vapi's knowledge or files feature. If you cannot find one, paste its text at the end of the system prompt.
+5. Knowledge: add `voice/knowledge.md` using Vapi's knowledge or files feature. If you cannot find one, paste its text at the end of the system prompt. Files you upload to Vapi are stored at a public web address, so put nothing private in `voice/knowledge.md`.
 6. Tools: ask your coding agent: "copy voice/tools.json into the Vapi dashboard one tool at a time, leaving out every line that starts with an underscore (_)". The five tools are check_availability, book_appointment, escalate, take_message and opt_out. Replace `YOUR-SITE.pages.dev` with your real Cloudflare address. Attach the tools to the assistant.
 7. Copy the assistant id from the assistant page.
 8. Paste the public key and assistant id into `voice.vapi_public_key` and `voice.assistant_id` in `business.json`, and set `voice.enabled` to `true`.
