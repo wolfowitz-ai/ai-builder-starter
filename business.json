@@ -35,7 +35,7 @@
     "enabled": false,
     "vapi_public_key": "PASTE_YOUR_VAPI_PUBLIC_KEY",
     "assistant_id": "PASTE_YOUR_VAPI_ASSISTANT_ID",
-    "greeting": "Hi, this is a demo assistant for Sample Comfort Heating and Air, a fictional business, so nothing here is real.",
+    "greeting": "Hi, this is a demo assistant for {name}, a fictional business, so nothing here is real.",
     "recording_notice": "This is demo placeholder wording. This practice call may be recorded.",
     "opt_out": "This is demo placeholder wording. Okay, noted that you do not want to be recorded. A real business needs its own reviewed wording here.",
     "emergency_script": "This is demo placeholder wording. If you smell gas or see smoke, leave the building now. Then call your local emergency number. I am flagging this to the team as an emergency.",

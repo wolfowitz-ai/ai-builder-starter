@@ -101,7 +101,11 @@ export function buildVariables(biz, now = new Date()) {
 
 /* [CODE-VERBATIM] The first words the assistant speaks, built by code, never by the model. */
 export function buildFirstMessage(biz) {
-  return `${biz.voice.greeting} ${biz.voice.recording_notice}`;
+  // {name} in the greeting becomes the business name, so renaming the business in one place is enough.
+  // "&" is spoken as "and".
+  const spokenName = String(biz.name).replace(/&/g, "and");
+  const greeting = String(biz.voice.greeting).replaceAll("{name}", spokenName);
+  return `${greeting} ${biz.voice.recording_notice}`;
 }
 
 /* ------------------------------------------------------------------ */
@@ -135,19 +139,22 @@ export function selectPosts(queue, timezone, now = new Date()) {
   const today = todayIn(timezone, now);
   const posts = [];
   const skipped = [];
-  if (!Array.isArray(queue)) return { posts, skipped: [{ label: "queue.json", reason: "must be a list (starts with [ )" }] };
+  const waiting = [];   // valid and queued, but their date has not arrived yet
+  const drafts = [];    // valid, status "draft": never shown
+  if (!Array.isArray(queue)) return { posts, skipped: [{ label: "queue.json", reason: "must be a list (starts with [ )" }], waiting, drafts };
   const seen = new Set();
   queue.forEach((entry, i) => {
     const reason = checkEntry(entry, seen);
     const label = entry && entry.id ? String(entry.id) : `entry number ${i + 1}`;
     if (reason) { skipped.push({ label, reason }); return; }
     seen.add(entry.id);
-    if (!SHOWN_STATUSES.includes(entry.status)) return;   // a draft: valid, just not shown
-    if (entry.publish_on > today) return;                 // not its day yet
+    if (!SHOWN_STATUSES.includes(entry.status)) { drafts.push(entry); return; }   // a draft: valid, just not shown
+    if (entry.publish_on > today) { waiting.push(entry); return; }                // not its day yet
     posts.push(entry);
   });
   posts.sort((a, b) => (a.publish_on < b.publish_on ? 1 : -1));
-  return { posts, skipped };
+  waiting.sort((a, b) => (a.publish_on > b.publish_on ? 1 : -1));
+  return { posts, skipped, waiting, drafts };
 }
 
 /* ------------------------------------------------------------------ */
@@ -271,7 +278,7 @@ async function setupBlog(biz) {
     container.replaceChildren(el("p", "Could not read content/queue.json. Check it is valid JSON.", "status error"));
     return;
   }
-  const { posts, skipped } = selectPosts(queue, biz.timezone);
+  const { posts, skipped, waiting, drafts } = selectPosts(queue, biz.timezone);
 
   container.replaceChildren();
   if (posts.length === 0) container.append(el("p", "No posts yet. Check back soon."));
@@ -289,6 +296,13 @@ async function setupBlog(biz) {
     panel.replaceChildren(el("h2", "Debug: skipped entries"));
     if (skipped.length === 0) panel.append(el("p", "None. Every entry passed the check."));
     for (const item of skipped) panel.append(el("p", `${item.label}: ${item.reason}`));
+    panel.append(el("h2", "Waiting for their date (not shown yet)"));
+    if (waiting.length === 0) panel.append(el("p", "None."));
+    for (const post of waiting) panel.append(el("p", `${post.publish_on}: ${post.title} (${post.id})`));
+    if (drafts.length > 0) {
+      panel.append(el("h2", "Drafts (never shown)"));
+      for (const post of drafts) panel.append(el("p", `${post.publish_on}: ${post.title} (${post.id})`));
+    }
   }
 }
 

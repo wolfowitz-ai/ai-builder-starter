@@ -49,7 +49,7 @@ Every lane below starts from the template as shipped. The "catch up" lane says w
 
 ### Day 1: Your site is live
 - [ ] Click "Use this template" on GitHub to make your own copy.
-- [ ] Edit `business.json`: name, tagline, industry, service area, timezone, hours, services, prices.
+- [ ] Edit `business.json`: name, tagline, industry, service area, timezone, hours, services, prices. The spoken greeting picks up your new name by itself (it contains `{name}`, leave that part as it is).
 - [ ] Edit `style.css` colours if you like (change `--brand`).
 - [ ] Deploy with Cloudflare Pages (steps below). Check the yellow DEMO ONLY banner shows.
 - [ ] Open `seam.html` on your site and read the seam map.
@@ -66,7 +66,7 @@ Catch up: skip the key. Until you add one, the form shows an "Open an email inst
 - [ ] Open `publisher/publisher.md` in your coding agent and ask it to draft 3 posts dated on the next three days.
 - [ ] Open `blog.html` (in your repo's file list, and at `/blog.html` on your site). Posts whose date has arrived show. Later ones stay hidden.
 - [ ] Open `content/queue.json` and set one post's `publish_on` to tomorrow's date, written `YYYY-MM-DD` (if today is 24 October 2026, write `2026-10-25`). Check tomorrow morning that it appears on `blog.html`.
-- [ ] Add `?debug` to the blog address to see any skipped entry and why.
+- [ ] Add `?debug` to the blog address to see any skipped entry and why, plus a list of posts that are waiting for their date.
 
 Catch up: the template already has 5 sample posts. Their dates in `queue.json` are examples, so some later ones may already be live by the time you read this. Edit their titles, and set one `publish_on` to tomorrow's date yourself.
 
@@ -103,17 +103,19 @@ Catch up: demo whatever you have. Show the seam map.
 
 ## Deploy on Cloudflare Pages (no terminal)
 
-1. Sign in to Cloudflare (free account). In the left menu choose Workers & Pages.
-2. Choose Create, then Pages, then Connect to Git. Authorize GitHub and pick your repo.
-3. Build settings: leave the build command empty. Set the build output directory to `/`.
-4. Choose Save and Deploy. After a minute you get an address like `https://your-project.pages.dev`.
-5. Every time you save a change on GitHub, Cloudflare publishes it again automatically.
+1. Sign in to Cloudflare (free account). In the left menu choose Workers & Pages, then Create.
+2. Cloudflare's front page for this ("Make something new") leads with Workers. Ignore those buttons and click the small link at the bottom: "Need to use the legacy Pages workflow? **Continue to Pages**". (Cloudflare now calls Pages "legacy". It still works, and this template needs it. If the link ever disappears, ask Kat or Andrew before trying another route.)
+3. Choose "Import an existing Git repository", then Get started. Authorize GitHub and pick your GitHub account.
+4. Your repo is missing from the list? That is normal for a repo you made after first linking GitHub. At the bottom of the list click "configure repository access for the Cloudflare Pages app on GitHub". GitHub asks for your password again. Under "Only select repositories" open the "Select repositories" list, tick your new repo, click Save, then come back to Cloudflare, reload the page and pick your repo.
+5. Click Begin setup. Leave the project name as it is (it becomes your address). Leave Framework preset "None", leave Build command EMPTY and leave Build output directory EMPTY (the box already has a `/` in front of it, so leave it blank).
+6. Click Save and Deploy. About 30 seconds later you see "Success! Your project is deployed" and an address like `https://your-project.pages.dev`.
+7. Every time you save a change on GitHub, Cloudflare publishes it again automatically (about a minute).
 
 The folder `functions/` is picked up by Cloudflare on its own. After deploying, open `https://your-project.pages.dev/api/vapi-tools` in a browser. You should see "tools endpoint is up".
 
 ## Web3Forms access key (contact form)
 
-1. Go to web3forms.com and enter your email to get a free access key. It arrives by email.
+1. Go to web3forms.com and click "Create your Form". Sign in with your email (they email you a code, and a "Verify you are human" box may appear: tick it yourself) or with Google. Fill in a form name and your site address (your `https://your-project.pages.dev` address without the https://), click Create Form, and your access key appears on the screen. The messages will be emailed to the address you signed in with.
 2. Paste it into `form.web3forms_key` in `business.json`. This key is public by design, so it is fine in the repo. Also put your email address in `form.fallback_email`: the "open an email instead" link uses it when the form is not connected. Web3Forms' free plan allows 250 submissions a month, no card.
 3. Submit the form on your live site. The message lands in the inbox you registered. (Free-plan limits may change, so check their site.)
 
@@ -154,7 +156,7 @@ On the API Keys page of the Vapi dashboard, the public key shows three settings:
 
 ## Cost and safety notes
 
-- Vapi: free while credits last. New accounts showed $5 of free credit on 2026-10-24. In our test calls (default model and Vapi's own voice) a call cost about 6 to 7 US cents a minute, so $5 is roughly an hour of testing. Voice calls cost real money afterwards. Prices change, so check Vapi's pricing page.
+- Vapi: free while credits last. New accounts showed $5 of free credit on 2026-10-24. A new assistant in the Vapi dashboard shows its price per minute at the top of the assistant page: about 9 US cents a minute on the default setup (hosting 5, speech-to-text under 1, the AI model 1 to 2, the voice 2). In our tests $5 turned into roughly an hour of calls. The page has Model Presets: pick Cost Saver while you are only testing. Voice calls cost real money afterwards, and prices change, so check Vapi's pricing page.
 - Everything else (GitHub, Cloudflare Pages, Web3Forms free plan) is free at this size.
 - Never put a Vapi private key in this repo.
 - Real deployments need their own professional and legal review. Recording rules, opt-out wording and emergency wording differ by place and by business.
