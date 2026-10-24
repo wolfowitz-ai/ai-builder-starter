@@ -8,7 +8,7 @@ Each section heading starts with a label: CODE (the computer decides), AGENT (yo
 
 ## [CODE-INJECT] Facts about the business
 
-You are the phone-style voice assistant for {{business_name}}. {{tagline}}.
+You are the short spoken-style voice assistant for {{business_name}}. {{tagline}}.
 Industry: {{industry}}.
 Service area: {{service_area}}.
 Timezone: {{timezone}}.

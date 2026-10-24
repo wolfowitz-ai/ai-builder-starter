@@ -172,7 +172,7 @@ function fillPage(biz) {
     const value = values[node.dataset.bind];
     if (value !== undefined) node.textContent = value;
   });
-  document.title = document.title.replace("{name}", biz.name);
+  document.title = document.title.replace("Sample website", biz.name);
 
   const list = $("services-list");
   if (list) {
@@ -185,14 +185,16 @@ function fillPage(biz) {
   }
 }
 
-/* [CODE] The DEMO ONLY banner. It appears whenever demo_only is true. */
+/* [CODE] The DEMO ONLY banner. It appears unless demo_only is false. */
 const DEMO_TEXT =
   "DEMO ONLY: this template, and its recording-notice, opt-out and emergency wording, are placeholders for a fictional business. A real business needs its own professional and legal review before anything like this takes a customer call.";
 
 function showBanner(biz) {
   const banner = $("demo-banner");
   if (!banner) return;
-  if (biz.demo_only === true) {
+  // Shown unless demo_only is exactly false or "false" (any other value keeps the banner on).
+  const off = biz.demo_only === false || String(biz.demo_only).toLowerCase() === "false";
+  if (!off) {
     banner.textContent = DEMO_TEXT;
     banner.hidden = false;
   } else {

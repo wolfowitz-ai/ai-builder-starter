@@ -1,6 +1,6 @@
 [
   {
-    "_seam": "[CODE-QUEUE] id, publish_on and status are checked by blog.html. [AGENT] title and body are drafted by your coding agent. This line is ignored by the page.",
+    "_seam": "[CODE-QUEUE] id, publish_on and status are checked by blog.html. [AGENT] title and body are drafted by your coding agent. The dates in this file are examples: after the first days, later posts may already be live. This line is ignored by the page.",
     "id": "2026-10-10-why-ac-ices-up",
     "title": "Why your AC unit can freeze over",
     "body": "If you see ice on the pipes or the outdoor unit, switch the system off and let it thaw.\n\nThe two most common causes are a clogged air filter and low airflow. Check the filter first. A dirty one is the cheapest problem to fix and the easiest to prevent.\n\nIf the ice comes back after a fresh filter, it is time to book a visit.",

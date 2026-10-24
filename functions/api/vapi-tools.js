@@ -17,6 +17,12 @@ function flat(text) {
   return String(text).replace(/\s+/g, " ").trim();
 }
 
+// True only for a real calendar date: 2026-02-30 and 2026-13-40 are rejected, not rolled over.
+function isRealDate(y, m, d) {
+  const t = new Date(Date.UTC(y, m - 1, d));
+  return t.getUTCFullYear() === y && t.getUTCMonth() === m - 1 && t.getUTCDate() === d;
+}
+
 // Thrown for bad input from the assistant; becomes {toolCallId, error}.
 class ToolProblem extends Error {}
 
@@ -88,6 +94,7 @@ function checkAvailability(biz, args, now) {
   const date = need(args, "date");
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) throw new ToolProblem("date must look like 2026-10-26");
   const [y, m, d] = date.split("-").map(Number);
+  if (!isRealDate(y, m, d)) throw new ToolProblem(`${date} is not a real calendar date, use a date like 2026-10-26`);
   const win = windowFor(biz, y, m, d);
   const dayName = FULL_DAYS[new Date(Date.UTC(y, m - 1, d)).getUTCDay()];
   if (!win) return `We are closed on ${dayName} ${date}.`;
@@ -120,6 +127,9 @@ function bookAppointment(biz, args, now) {
   // With a zone ("...Z" or "+01:00") it is read as given.
   const parts = startIso.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::\d{2}(?:\.\d+)?)?(Z|[+-]\d{2}:\d{2})?$/);
   if (!parts) throw new ToolProblem("start_iso must look like 2026-10-26T09:00");
+  if (!isRealDate(+parts[1], +parts[2], +parts[3]) || +parts[4] > 23 || +parts[5] > 59) {
+    throw new ToolProblem(`${startIso} is not a real calendar date and time, use something like 2026-10-26T09:00`);
+  }
   let start;
   if (parts[6]) {
     start = new Date(startIso);
@@ -176,11 +186,13 @@ const TOOLS = {
 
 // Vapi sends message.toolCallList. Older shapes (toolCalls, functionCall) are tolerated too.
 function extractCalls(body) {
-  const message = (body && body.message) || {};
-  let raw = message.toolCallList || message.toolCalls || [];
-  if (!raw.length && message.functionCall) raw = [message.functionCall];
-  return raw.map((call) => {
-    const fn = call.function || call;
+  const message = body && typeof body.message === "object" && body.message ? body.message : {};
+  const list = (value) => (Array.isArray(value) ? value : []);   // anything that is not a list counts as empty
+  let raw = list(message.toolCallList);
+  if (!raw.length) raw = list(message.toolCalls);
+  if (!raw.length && message.functionCall && typeof message.functionCall === "object") raw = [message.functionCall];
+  return raw.filter((call) => call && typeof call === "object").map((call) => {
+    const fn = call.function && typeof call.function === "object" ? call.function : call;
     let args = fn.arguments !== undefined ? fn.arguments : fn.parameters;
     if (typeof args === "string") {
       try { args = JSON.parse(args); } catch (err) { args = null; }
@@ -200,7 +212,16 @@ export async function onRequestGet() {
   return new Response("tools endpoint is up", { headers: { "Content-Type": "text/plain" } });
 }
 
-export async function onRequestPost({ request, env }) {
+export async function onRequestPost(context) {
+  // Bad secret -> 401 and malformed JSON -> 400 are intended. Any other surprise -> 200 with empty results, never a 500.
+  try {
+    return await handlePost(context);
+  } catch (err) {
+    return json({ results: [] });
+  }
+}
+
+async function handlePost({ request, env }) {
   // Optional shared secret. Set VAPI_SERVER_SECRET in Cloudflare and in Vapi to turn this on.
   if (env && env.VAPI_SERVER_SECRET && request.headers.get("x-vapi-secret") !== env.VAPI_SERVER_SECRET) {
     return json({ error: "unauthorized" }, 401);
@@ -224,7 +245,7 @@ export async function onRequestPost({ request, env }) {
   const results = calls.map((call) => {
     try {
       if (!biz) throw new ToolProblem("could not read business.json");
-      const tool = TOOLS[call.name];
+      const tool = Object.hasOwn(TOOLS, call.name) ? TOOLS[call.name] : null;
       if (!tool) throw new ToolProblem(`unknown tool ${call.name}`);
       if (call.badArgs) throw new ToolProblem("arguments were not valid JSON");
       return { toolCallId: call.id, result: flat(tool(biz, call.args, new Date())) };

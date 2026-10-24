@@ -12,13 +12,23 @@
 
 A real deployment needs its own professional and legal review. That is the main lesson of Day 7.
 
+## How to edit a file with no terminal
+
+1. On GitHub, open the file in your repo and click the pencil icon.
+2. Change the text, then click "Commit changes".
+3. Cloudflare Pages publishes the change again in about a minute.
+
+Or ask your Claude Code or Codex app to make the edit for you.
+
+Dotted names point inside `business.json`. For example `form.web3forms_key` means the `web3forms_key` line inside the `form` box of `business.json`. `voice.enabled` means `enabled` inside the `voice` box.
+
 ## The 16 files, in plain English
 
 | File | What it is |
 |---|---|
 | `business.json` | The one place for every fact: name, hours, services, prices, keys, spoken lines. Start here. |
 | `index.html` | Home page with the contact form and the voice button. |
-| `blog.html` | The blog page. |
+| `blog.html` | The blog page. It is in the top-level file list of your repo, and at `/blog.html` on your site. |
 | `seam.html` | Shows the seam map, the assistant's prompt, and whether the spoken lines match. |
 | `style.css` | Colours and layout. |
 | `app.js` | The code that fills pages from business.json, sends the form, shows the blog and starts the voice call. |
@@ -54,19 +64,20 @@ Catch up: skip the key. Until you add one, the form shows an "Open an email inst
 
 ### Day 3: The blog
 - [ ] Open `publisher/publisher.md` in your coding agent and ask it to draft 3 posts dated on the next three days.
-- [ ] Open `blog.html`. Posts whose date has arrived show. Later ones stay hidden.
+- [ ] Open `blog.html` (in your repo's file list, and at `/blog.html` on your site). Posts whose date has arrived show. Later ones stay hidden.
+- [ ] Open `content/queue.json` and set one post's `publish_on` to tomorrow's date, written `YYYY-MM-DD` (if today is 24 October 2026, write `2026-10-25`). Check tomorrow morning that it appears on `blog.html`.
 - [ ] Add `?debug` to the blog address to see any skipped entry and why.
 
-Catch up: the template already has 5 sample posts (2 old, 1 for tomorrow, 2 later). Just edit their titles and dates.
+Catch up: the template already has 5 sample posts. Their dates in `queue.json` are examples, so some later ones may already be live by the time you read this. Edit their titles, and set one `publish_on` to tomorrow's date yourself.
 
-### Day 4: Voice assistant and the three-path check
+### Day 4: Voice assistant and the three checks
 - [ ] Create your Vapi assistant from `voice/persona.md`, `voice/knowledge.md` and `voice/tools.json` (below).
 - [ ] Put your Vapi public key and assistant id into `business.json` and set `voice.enabled` to `true`.
 - [ ] Keep `booking.mode` as `"stub"`.
 - [ ] Check there are no prices or hours in `voice/knowledge.md`.
-- [ ] Run the three-path checklist (below).
+- [ ] Run the three checks (below): form, voice, blog.
 
-Catch up: do only Path A (form) and Path C (blog) and use the Vapi dashboard test call for the voice.
+Catch up: do only Path A (form) and Path C (blog) and for the voice, the Vapi dashboard test call only checks that the assistant answers at all. The real test is the "Start voice demo" button on your own site.
 
 ### Day 5: Guardrails
 - [ ] Try an emergency ("I smell gas"). The assistant should call `escalate` and the emergency wording should be spoken.
@@ -79,8 +90,8 @@ Catch up: leave `booking.mode` as `"stub"`. The guardrail checks work in stub mo
 
 ### Day 6: Integrate or catch up
 - [ ] Add a call-to-action on a blog post pointing to the voice demo (ask your agent).
-- [ ] Fix anything from the three-path check.
-- [ ] Stretch: ask your agent about sending an end-of-call report to the same function.
+- [ ] Fix anything that failed in the three checks.
+- [ ] Stretch: ask your agent about sending a summary of each finished call to the same function.
 
 Catch up: this is a free day. Finish any missed checklist item from Days 1 to 5.
 
@@ -115,21 +126,21 @@ Vapi is the voice service. It is free while your starting credits last, then it 
 3. Create a new assistant (blank). Pick a voice and a model.
 4. System prompt: paste `voice/persona.md` from the first `##` heading onward.
 5. Knowledge: add `voice/knowledge.md` using Vapi's knowledge or files feature. If you cannot find one, paste its text at the end of the system prompt.
-6. Tools: create the five tools from `voice/tools.json` (check_availability, book_appointment, escalate, take_message, opt_out). Replace `YOUR-SITE.pages.dev` with your real Cloudflare address. Delete the lines that start with an underscore (`_seam`, `_copy_of`) when pasting, since Vapi may reject unknown fields. Attach the tools to the assistant.
+6. Tools: ask your coding agent: "copy voice/tools.json into the Vapi dashboard one tool at a time, leaving out every line that starts with an underscore (_)". The five tools are check_availability, book_appointment, escalate, take_message and opt_out. Replace `YOUR-SITE.pages.dev` with your real Cloudflare address. Attach the tools to the assistant.
 7. Copy the assistant id from the assistant page.
 8. Paste the public key and assistant id into `voice.vapi_public_key` and `voice.assistant_id` in `business.json`, and set `voice.enabled` to `true`.
 
 The greeting, recording notice, opt-out and emergency lines are spoken word for word. The greeting and recording notice come from `business.json` through `app.js`. The opt-out and emergency lines are fixed text inside the Vapi tool messages, so they are copies of the same text from `business.json`. Paste from `business.json` into `voice/tools.json` and into Vapi. `seam.html` turns red if they drift.
 
-The Vapi dashboard's own test call does not know your `business.json` values, so the assistant will sound blank there. Test from your live site's button.
+The Vapi dashboard's own test call is only a "does the assistant answer at all?" connection check. It will not know your business details, because the website's voice button passes them in from `business.json`. The real test is the voice button on your own live site.
 
-## Day 4 three-path checklist
+## Day 4 checks: form, voice, blog
 
 Each path has a fallback if you do not have the account yet.
 
 - [ ] Path A, form to email: send a message from the form and find it in your inbox. No account fallback: the page shows an "Open an email instead" link that opens your mail app.
 - [ ] Path B, voice demo (web call): click "Start voice demo", allow the microphone, and ask for an appointment. No account fallback: the page says "Voice demo not set up yet (Day 4)", and you read `voice/persona.md` in `seam.html` to see what the assistant would be told.
-- [ ] Path C, blog queue: confirm a post dated today shows and a post dated in the future does not. No account is needed for this path. Add a post dated tomorrow morning and check that it appears tomorrow.
+- [ ] Path C, blog queue: confirm a post dated today shows and a post dated in the future does not. No account is needed for this path. Set one post to tomorrow's date (`YYYY-MM-DD`) and check that it appears tomorrow morning.
 
 ## Hide the voice button when you are not demoing
 
