@@ -103,7 +103,7 @@ The folder `functions/` is picked up by Cloudflare on its own. After deploying, 
 ## Web3Forms access key (contact form)
 
 1. Go to web3forms.com and enter your email to get a free access key. It arrives by email.
-2. Paste it into `form.web3forms_key` in `business.json`. This key is public by design, so it is fine in the repo.
+2. Paste it into `form.web3forms_key` in `business.json`. This key is public by design, so it is fine in the repo. Also put your email address in `form.fallback_email`: the "open an email instead" link uses it when the form is not connected. Web3Forms' free plan allows 250 submissions a month, no card.
 3. Submit the form on your live site. The message lands in the inbox you registered. (Free-plan limits may change, so check their site.)
 
 ## Vapi: public key, assistant id, and setting up the assistant

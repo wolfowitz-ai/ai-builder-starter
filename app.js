@@ -215,7 +215,7 @@ function setupForm(biz) {
       const data = new FormData(form);
       const body = `Name: ${data.get("name")}\nEmail: ${data.get("email")}\n\n${data.get("message")}`;
       const link = el("a", "Open an email instead");
-      link.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      link.href = `mailto:${isPlaceholder(biz.form.fallback_email) ? '' : encodeURIComponent(biz.form.fallback_email).replace(/%40/g, '@')}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
       status.className = "status warn";
       status.replaceChildren(
         "The form is not connected yet (add your Web3Forms key in business.json on Day 2). ", link,

@@ -43,6 +43,7 @@
   },
   "form": {
     "web3forms_key": "PASTE_YOUR_WEB3FORMS_KEY",
+    "fallback_email": "PASTE_YOUR_EMAIL_ADDRESS",
     "success_message": "Thanks, your message was sent. This is a demo business, so nobody will actually reply."
   },
   "extra": {
