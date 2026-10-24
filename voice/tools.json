@@ -8,13 +8,25 @@
       "parameters": {
         "type": "object",
         "properties": {
-          "date": { "type": "string", "description": "The date to check, formatted YYYY-MM-DD." }
+          "date": {
+            "type": "string",
+            "description": "The date to check, formatted YYYY-MM-DD."
+          }
         },
-        "required": ["date"]
+        "required": [
+          "date"
+        ]
       }
     },
-    "server": { "url": "https://YOUR-SITE.pages.dev/api/vapi-tools" },
+    "server": {
+      "url": "https://YOUR-SITE.pages.dev/api/vapi-tools"
+    },
     "messages": [
+      {
+        "type": "request-start",
+        "content": "One moment.",
+        "_copy_of": "voice.working_line"
+      },
       {
         "type": "request-failed",
         "content": "Sorry, something went wrong on my side. I can take a message for the team instead.",
@@ -31,16 +43,40 @@
       "parameters": {
         "type": "object",
         "properties": {
-          "name": { "type": "string", "description": "Caller's name." },
-          "phone": { "type": "string", "description": "A contact number the caller gives you." },
-          "service": { "type": "string", "description": "Exact service name from the list of services." },
-          "start_iso": { "type": "string", "description": "Start time like 2026-10-26T09:00 in the business timezone." }
+          "name": {
+            "type": "string",
+            "description": "Caller's name."
+          },
+          "phone": {
+            "type": "string",
+            "description": "A contact number the caller gives you."
+          },
+          "service": {
+            "type": "string",
+            "description": "Exact service name from the list of services."
+          },
+          "start_iso": {
+            "type": "string",
+            "description": "Start time like 2026-10-26T09:00 in the business timezone."
+          }
         },
-        "required": ["name", "phone", "service", "start_iso"]
+        "required": [
+          "name",
+          "phone",
+          "service",
+          "start_iso"
+        ]
       }
     },
-    "server": { "url": "https://YOUR-SITE.pages.dev/api/vapi-tools" },
+    "server": {
+      "url": "https://YOUR-SITE.pages.dev/api/vapi-tools"
+    },
     "messages": [
+      {
+        "type": "request-start",
+        "content": "One moment.",
+        "_copy_of": "voice.working_line"
+      },
       {
         "type": "request-failed",
         "content": "Sorry, something went wrong on my side. I can take a message for the team instead.",
@@ -57,16 +93,28 @@
       "parameters": {
         "type": "object",
         "properties": {
-          "reason": { "type": "string", "description": "One short sentence on what the caller described." }
+          "reason": {
+            "type": "string",
+            "description": "One short sentence on what the caller described."
+          }
         },
-        "required": ["reason"]
+        "required": [
+          "reason"
+        ]
       }
     },
-    "server": { "url": "https://YOUR-SITE.pages.dev/api/vapi-tools" },
+    "server": {
+      "url": "https://YOUR-SITE.pages.dev/api/vapi-tools"
+    },
     "messages": [
       {
+        "type": "request-start",
+        "content": "One moment.",
+        "_copy_of": "voice.working_line"
+      },
+      {
         "type": "request-complete",
-        "content": "DEMO ONLY placeholder wording: if anyone is in danger, or you smell gas or see smoke, leave the building now and call your local emergency number. I am flagging this to the team as an emergency.",
+        "content": "This is demo placeholder wording. If anyone is in danger, or you smell gas or see smoke, leave the building now and call your local emergency number. I am flagging this to the team as an emergency.",
         "_copy_of": "voice.emergency_script"
       },
       {
@@ -85,15 +133,35 @@
       "parameters": {
         "type": "object",
         "properties": {
-          "name": { "type": "string", "description": "Caller's name." },
-          "phone": { "type": "string", "description": "A contact number the caller gives you." },
-          "note": { "type": "string", "description": "What the caller wants the team to know." }
+          "name": {
+            "type": "string",
+            "description": "Caller's name."
+          },
+          "phone": {
+            "type": "string",
+            "description": "A contact number the caller gives you."
+          },
+          "note": {
+            "type": "string",
+            "description": "What the caller wants the team to know."
+          }
         },
-        "required": ["name", "phone", "note"]
+        "required": [
+          "name",
+          "phone",
+          "note"
+        ]
       }
     },
-    "server": { "url": "https://YOUR-SITE.pages.dev/api/vapi-tools" },
+    "server": {
+      "url": "https://YOUR-SITE.pages.dev/api/vapi-tools"
+    },
     "messages": [
+      {
+        "type": "request-start",
+        "content": "One moment.",
+        "_copy_of": "voice.working_line"
+      },
       {
         "type": "request-failed",
         "content": "Sorry, something went wrong on my side. I can take a message for the team instead.",
@@ -113,11 +181,18 @@
         "required": []
       }
     },
-    "server": { "url": "https://YOUR-SITE.pages.dev/api/vapi-tools" },
+    "server": {
+      "url": "https://YOUR-SITE.pages.dev/api/vapi-tools"
+    },
     "messages": [
       {
+        "type": "request-start",
+        "content": "One moment.",
+        "_copy_of": "voice.working_line"
+      },
+      {
         "type": "request-complete",
-        "content": "DEMO ONLY placeholder wording: okay, noted that you do not want to be recorded. A real business needs its own reviewed wording here.",
+        "content": "This is demo placeholder wording. Okay, noted that you do not want to be recorded. A real business needs its own reviewed wording here.",
         "_copy_of": "voice.opt_out"
       },
       {

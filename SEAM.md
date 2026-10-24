@@ -37,6 +37,7 @@ Where labels live: HTML files use `<!-- -->` comments, CSS uses `/* */`, JavaScr
 | Opt-out wording | CODE-VERBATIM | business.json voice.opt_out, copy in voice/tools.json (opt_out tool) | Fixed words spoken by a tool message. Placeholder in this demo. |
 | Emergency wording | CODE-VERBATIM | business.json voice.emergency_script, copy in voice/tools.json (escalate tool) | Safety words are fixed. Placeholder in this demo. |
 | Tool-error line | CODE-VERBATIM | business.json voice.tool_error_line, copy in voice/tools.json | A fixed fallback when a tool fails. |
+| "One moment" line | CODE-VERBATIM | business.json voice.working_line, copy in voice/tools.json (every tool) | Without it Vapi lets the AI improvise a filler phrase while a tool runs. |
 | Deciding it is an emergency | SEAM | voice/persona.md triage section, then escalate tool | The agent judges, the code says the words. |
 | Copies of voice text in tools.json | CODE-VERBATIM | voice/tools.json, checked by seam.html | Vapi tool messages are fixed text, so they are copies. seam.html turns red if they drift. |
 | Questions to ask the caller | AGENT-QUALIFY | voice/persona.md | Judgement about the conversation. |
