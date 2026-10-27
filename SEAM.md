@@ -44,6 +44,7 @@ Where labels live: HTML files use `<!-- -->` comments, CSS uses `/* */`, JavaScr
 | How urgent is the problem | AGENT-TRIAGE | voice/persona.md | Judgement, with a rubric to guide it. |
 | Tone and open-ended answers | AGENT-REPLY | voice/persona.md, voice/knowledge.md | The AI writes the words. It says "I don't know" instead of inventing. |
 | Availability and booking rules | CODE | functions/api/vapi-tools.js | Hours, notice and slot rules are checked the same way every time. |
+| Hours and notice with Vapi's Google Calendar tools | SEAM-soft | voice/persona.md booking steps | Those tools only know what is on the calendar, not your opening hours or notice rule, so the AI has to apply them. In a live test an empty calendar looked free all day. |
 | Deciding when to check or book | SEAM | voice/persona.md booking steps, tools in voice/tools.json | The agent chooses the moment, the function checks the facts. |
 | Reading the booking confirmation aloud | SEAM-soft | voice/persona.md | We ask for word-for-word, but cannot force it. In a live test the AI reworded it anyway. |
 | Contact form email subject and fields | CODE-FORMAT | app.js | Built by code in a fixed format. |
