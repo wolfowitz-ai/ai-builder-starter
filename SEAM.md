@@ -32,6 +32,7 @@ Where labels live: HTML files use `<!-- -->` comments, CSS uses `/* */`, JavaScr
 | Prices | CODE-INJECT | business.json, formatted by app.js into prices_text | A wrong price is a promise. Kept out of the knowledge base. |
 | Minimum booking notice | CODE-INJECT | business.json booking.min_notice_hours | Exact rule, also enforced by vapi-tools.js. |
 | Today's date and time | CODE-INJECT | app.js today_text | The assistant needs the real date to check availability. |
+| Timezone offsets for the coming year | CODE-INJECT | app.js utc_offsets_text | Vapi's calendar availability tool reads a time with no offset as UTC. The code works out daylight saving; the AI does not guess it. |
 | Extra notes drawer | SEAM | business.json extra, passed as one {{extra}} string | Code carries it untouched, the agent reads it. No code looks inside. |
 | Greeting and recording notice | CODE-VERBATIM | business.json voice, spoken as Vapi firstMessage built by app.js | Legal-sounding words are never improvised. Placeholder in this demo. |
 | Opt-out wording | CODE-VERBATIM | business.json voice.opt_out, copy in voice/tools.json (opt_out tool) | Fixed words spoken by a tool message. Placeholder in this demo. |
@@ -44,7 +45,8 @@ Where labels live: HTML files use `<!-- -->` comments, CSS uses `/* */`, JavaScr
 | How urgent is the problem | AGENT-TRIAGE | voice/persona.md | Judgement, with a rubric to guide it. |
 | Tone and open-ended answers | AGENT-REPLY | voice/persona.md, voice/knowledge.md | The AI writes the words. It says "I don't know" instead of inventing. |
 | Availability and booking rules | CODE | functions/api/vapi-tools.js | Hours, notice and slot rules are checked the same way every time. |
-| Hours and notice with Vapi's Google Calendar tools | SEAM-soft | voice/persona.md booking steps | Those tools only know what is on the calendar, not your opening hours or notice rule, so the AI has to apply them. In a live test an empty calendar looked free all day. |
+| Opening hours with Vapi's Google Calendar tools | CODE (the calendar) | "Closed" events on the booking calendar | A closed block shows as busy, so the tool refuses those times whatever the AI does. Nothing to build, and the best fix we found. |
+| Minimum notice with Vapi's Google Calendar tools | SEAM-soft | voice/persona.md booking steps | The calendar cannot express it, so the AI applies the rule from its instructions. In a live test it refused a Sunday 3 AM request. |
 | Deciding when to check or book | SEAM | voice/persona.md booking steps, tools in voice/tools.json | The agent chooses the moment, the function checks the facts. |
 | Reading the booking confirmation aloud | SEAM-soft | voice/persona.md | We ask for word-for-word, but cannot force it. In a live test the AI reworded it anyway. |
 | Contact form email subject and fields | CODE-FORMAT | app.js | Built by code in a fixed format. |

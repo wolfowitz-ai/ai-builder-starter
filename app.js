@@ -74,6 +74,30 @@ export function nowText(timezone, now = new Date()) {
   return `${weekday} ${todayIn(timezone, now)}, ${time}`;
 }
 
+// "-04:00 until 2026-10-31; -05:00 from 2026-11-01 until 2027-03-13; ..." for the next year, computed by the
+// browser. Vapi's Google Calendar availability tool reads times without an offset as UTC, so the assistant is
+// told the exact offset to write on every time (the code works it out, the AI never guesses daylight saving).
+export function utcOffsetsText(timezone, now = new Date(), days = 400) {
+  const offsetOn = (date) => {
+    const part = new Intl.DateTimeFormat("en-US", { timeZone: timezone, timeZoneName: "longOffset", hour: "numeric" })
+      .formatToParts(date).find((p) => p.type === "timeZoneName").value;   // "GMT-05:00" or "GMT"
+    const m = /GMT([+-]\d{2}):?(\d{2})?/.exec(part);
+    return m ? `${m[1]}:${m[2] || "00"}` : "+00:00";
+  };
+  const segments = [];
+  for (let i = 0; i <= days; i++) {
+    const date = new Date(now.getTime() + i * 86400000);
+    const off = offsetOn(date), day = todayIn(timezone, date);
+    const last = segments[segments.length - 1];
+    if (!last || last.off !== off) segments.push({ off, from: day });
+  }
+  return segments.map((seg, i) => {
+    const next = segments[i + 1];
+    const until = next ? ` until ${todayIn(timezone, new Date(new Date(next.from + "T12:00:00Z").getTime() - 86400000))}` : "";
+    return `${seg.off}${i === 0 ? "" : " from " + seg.from}${until}`;
+  }).join("; ");
+}
+
 export function isPlaceholder(value) {
   return !value || /^PASTE_/i.test(String(value));
 }
@@ -95,6 +119,7 @@ export function buildVariables(biz, now = new Date()) {
     prices_text: formatPrices(biz.prices),
     min_notice_hours: String(biz.booking.min_notice_hours),
     today_text: nowText(biz.timezone, now),
+    utc_offsets_text: utcOffsetsText(biz.timezone, now),
     extra: JSON.stringify(biz.extra || {}),
   };
 }
