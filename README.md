@@ -49,7 +49,7 @@ Every lane below starts from the template as shipped. The "catch up" lane says w
 
 ### Day 1: Your site is live
 - [ ] Click "Use this template" on GitHub to make your own copy.
-- [ ] Edit `business.json`: name, tagline, industry, service area, timezone, hours, services, prices. The spoken greeting picks up your new name by itself (it contains `{name}`, leave that part as it is).
+- [ ] Edit `business.json`: name, tagline, industry, service area, timezone, hours, services, prices. The timezone is the one place that says where your business is: use the long name such as `America/Chicago` or `Europe/London` (the demo uses `America/New_York`). The hours, the blog dates, the assistant's idea of "today" and the booking times all follow it. The spoken greeting picks up your new name by itself (it contains `{name}`, leave that part as it is).
 - [ ] Edit `style.css` colours if you like (change `--brand`).
 - [ ] Deploy with Cloudflare Pages (steps below). Check the yellow DEMO ONLY banner shows.
 - [ ] Open `seam.html` on your site and read the seam map.

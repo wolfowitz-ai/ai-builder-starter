@@ -398,6 +398,12 @@ async function main() {
     document.body.prepend(message);
     return;
   }
+  try {
+    new Intl.DateTimeFormat("en-US", { timeZone: biz.timezone });   // throws if the name is not a real timezone
+  } catch (err) {
+    document.body.prepend(el("p", `The timezone "${biz.timezone}" in business.json is not a real timezone name. Use the long form, for example America/New_York, America/Chicago, America/Denver, America/Los_Angeles, Europe/London or Asia/Kolkata.`, "status error"));
+    return;
+  }
   fillPage(biz);
   showBanner(biz);
   setupForm(biz);
